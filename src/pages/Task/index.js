@@ -1,7 +1,8 @@
 import React, {useState, useEffect} from 'react';
 import {View, Text, TouchableOpacity, FlatList} from 'react-native';
 import database from '../../config/firebase.js';
-import {FontAwesome} from 'react-native-vector-icons';
+//import {FontAwesome} from 'react-native-vector-icons';
+import { ListItem, Button, Icon } from 'react-native-elements'
 import styles from './style';
 
 export default function Task({navigation}) {
@@ -13,29 +14,38 @@ export default function Task({navigation}) {
   }
 
   useEffect(() => {
-    // database.collection('Tasks').onSnapshot(query => {
-    //   const list = [];
-    //   query.forEach(doc => {
-    //     list.push({...doc.data(), id: doc.id});
-    //   });
-    //   setTasks(list);
-    // });
+    database.collection('Tasks').onSnapshot(query => {
+      const list = [];
+      query.forEach(doc => {
+        list.push({...doc.data(), id: doc.id});
+      });
+      setTasks(list);
+      console.log('Lista:', list);
+    });
    
-    const lista = [];
-    const item = { description: "Estudar JavaScript 2", id: "4n501LxY2CcfRYUdL4an", status: "false" };
-    lista.push(item);
-    //console.log(lista);
+    // const lista = [];
+    // const item = { description: "Estudar JavaScript 2", id: "4n501LxY2CcfRYUdL4an", status: "false" };
+    // lista.push(item);
+    // //console.log(lista);
 
-    //setTask(list);
-    setTarefas(lista);
-    console.log('tarefas: ', tarefas);
+    // //setTask(list);
+    // setTarefas(lista);
+    // console.log('tarefas: ', tarefas);
   }, []);
+
+  function renderizarItens() {
+    return tasks.map((item) => {
+      return (
+        <Text>{item.description}</Text>
+      )
+    });
+  }
 
   return (
     <View style={styles.container}>
       <FlatList
         showsVerticalScrollIndicator={false}
-        data={tarefas}
+        data={tasks}
         renderItem={({item}) => {
           return (
             <View style={styles.Tasks}>
@@ -44,10 +54,10 @@ export default function Task({navigation}) {
                 onPress={() => {
                   deleteTask(item.id);
                 }}>
-                <FontAwesome
+                {/* <FontAwesome
                   name="star"
                   size={23}
-                  color="#F92e6A"></FontAwesome>
+                  color="#F92e6A"></FontAwesome> */}
               </TouchableOpacity>
               <Text
                 style={styles.DescriptionTask}
